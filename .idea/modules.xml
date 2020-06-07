@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Lab7_Triangle.iml" filepath="$PROJECT_DIR$/Lab7_Triangle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SierpinskiTriangle.iml" filepath="$PROJECT_DIR$/SierpinskiTriangle.iml" />
     </modules>
   </component>
 </project>

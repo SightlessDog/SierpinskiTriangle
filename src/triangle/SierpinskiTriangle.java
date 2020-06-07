@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 
     import java.awt.*;
@@ -11,6 +12,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Path2D;
 import java.awt.geom.Path2D.Double;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.ColorModel;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,6 +30,11 @@ import javax.xml.xpath.XPath;
         Point p2 = new Point(0,0);
         Point p3 = new Point(0,0);
         static int[] YPoints2 = new int[3];
+        //The color for every new level of triangles.
+        private static Color color = new Color(145,205,205);
+
+        private static Color colorMiddle = new Color(35,35,45);
+
 
         JFrame frame;
         JPanel panel;
@@ -41,7 +49,7 @@ import javax.xml.xpath.XPath;
                 public void paint(Graphics g) {
                     super.paint(g);
                     paintSierpinskiTriangle(g, getSize());
-                    EquilateralTriangles(g,p1,p2,p3, 11);
+                    EquilateralTriangles(g,p1,p2,p3, 11,color,colorMiddle);
                 }
             };
             panel.addComponentListener(new ComponentAdapter() {
@@ -84,19 +92,25 @@ import javax.xml.xpath.XPath;
 
 
         //Triangle
-        public  void EquilateralTriangles (Graphics g, Point p1, Point p2,Point p3 ,int level) {
+        public void EquilateralTriangles (Graphics g, Point p1, Point p2,Point p3 ,int level, Color colorNew,Color colorMiddle) {
             if (level == 1) {
                 DrawTriangle(g,p1,p2,p3);
+                g.setColor(color);
             }
             if(level != 1) {
                 Point p4 = midPoint(p1,p2);
                 Point p5 = midPoint(p2,p3);
                 Point p6 = midPoint(p1,p3);
-                EquilateralTriangles(g,p1,p4,p6,level-1);
-                EquilateralTriangles(g,p4,p2,p5,level-1);
-                EquilateralTriangles(g,p6,p5,p3,level-1);
-
+                g.setColor(colorMiddle);
+                DrawTriangle(g,p4,p5,p6);
+                g.setColor(colorNew);
+                EquilateralTriangles(g,p1,p4,p6,level-1,colorNew,colorMiddle.brighter());
+                g.setColor(colorNew);
+                EquilateralTriangles(g,p4,p2,p5,level-1,colorNew.darker(),colorMiddle.brighter());
+                g.setColor(colorNew);
+                EquilateralTriangles(g,p6,p5,p3,level-1,colorNew,colorMiddle.brighter());
             }
+
         }
 
         //Following drawing actions and calulations.
@@ -134,6 +148,8 @@ import javax.xml.xpath.XPath;
             p.addPoint(p1.x,p1.y);
             p.addPoint(p2.x,p2.y);
             p.addPoint(p3.x,p3.y);
+
+            g2.setBackground(color);
             g2.fillPolygon(p);
 
             // g2.fillPolygon(p);
